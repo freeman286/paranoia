@@ -8,6 +8,8 @@ Paranoia::Application.routes.draw do
   
   resources :threats
   match '/threats/:lat/:long' => 'threats#index'
+  
+  match '/comments/json_create/:name/:user_name/:user_image_url/:threat_id' => 'comments#json_create'
 
 
   # The priority is based upon order of creation:

@@ -1,6 +1,8 @@
 class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
+  respond_to :json, :html
+  
   def index
     @comments = Comment.all
 
@@ -51,6 +53,10 @@ class CommentsController < ApplicationController
         format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def json_create
+    respond_with Comment.create(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f)
   end
 
   # PUT /comments/1
