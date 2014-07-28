@@ -6,20 +6,22 @@ class Threat < ActiveRecord::Base
     while n < 60
       w = -30
       while w < 5
-        response = HTTParty.get("http://data.police.uk/api/crimes-street/all-crime?lat=#{n}&lng=#{n}=#{Time.now.strftime("%Y-%m")}")
+        response = HTTParty.get("http://data.police.uk/api/crimes-street/all-crime?lat=#{n}&lng=#{w}&date=2013-01")
         data = response.parsed_response
         if data.present?
           data.each do |d|
             t = Threat.new
             t.name = d["category"]
             t.description = d["outcome_status"]["category"] if d["outcome_status"]
-            t.location = d["location"]["street"]["name"]
+            t.location = "#{d["location"]["latitude"]}-#{d["location"]["longitude"]}"
             t.save
+            t
           end
         end
-        w += 0.01
+        puts "#{n}-#{w}"
+        w += 1.to_f / 69.to_f
       end 
-      n += 0.01
+      n += 1.to_f / 69.to_f
     end
-  end
+  end  
 end
