@@ -23,5 +23,18 @@ class Threat < ActiveRecord::Base
       end 
       n += 1.to_f / 69.to_f
     end
-  end  
+  end
+  
+  def self.find_by_lat_long(lat, long)
+    threats = []
+    Threat.all.each do |threat|
+      x = threat.location.index("-")
+      tlat = threat.location[0..x-1].to_f
+      tlong = threat.location[x+1..-1].to_f
+      if (lat - 1 < tlat) && (tlat < lat + 1) && (long - 1 < tlong) && (tlong < long + 1)
+        threats << threat
+      end 
+    end
+    threats
+  end
 end

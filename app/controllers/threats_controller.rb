@@ -2,7 +2,12 @@ class ThreatsController < ApplicationController
   # GET /threats
   # GET /threats.json
   def index
-    @threats = Threat.all
+    if params[:lat] && params[:long]
+      @threats = Threat.find_by_lat_long(params[:lat].to_f, params[:long].to_f)
+    else
+      @threats = Threat.all
+      
+    end
 
     respond_to do |format|
       format.html # index.html.erb

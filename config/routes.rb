@@ -1,5 +1,6 @@
 Paranoia::Application.routes.draw do
   resources :threats
+  match '/threats/:lat/:long' => 'threats#index'
 
 
   # The priority is based upon order of creation:
