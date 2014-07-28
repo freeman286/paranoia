@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @threat.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @threat.description %>
+</p>
+
+<p>
+  <b>Image url:</b>
+  <%= @threat.image_url %>
+</p>
+
+
+<%= link_to 'Edit', edit_threat_path(@threat) %> |
+<%= link_to 'Back', threats_path %>
