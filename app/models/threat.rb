@@ -1,6 +1,8 @@
 class Threat < ActiveRecord::Base
   attr_accessible :description, :image_url, :name, :location
   
+  has_many :comments
+  
   def self.get_police_data
     n = 50
     while n < 60

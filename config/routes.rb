@@ -1,4 +1,11 @@
 Paranoia::Application.routes.draw do
+  resources :comments
+
+  resources :threats do
+    resources :comments
+  end
+  
+  
   resources :threats
   match '/threats/:lat/:long' => 'threats#index'
 

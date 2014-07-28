@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140728110103) do
+ActiveRecord::Schema.define(:version => 20140728141917) do
+
+  create_table "comments", :force => true do |t|
+    t.string   "name"
+    t.string   "user_name"
+    t.string   "user_image_url"
+    t.integer  "threat_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "comments", ["threat_id"], :name => "index_comments_on_threat_id"
 
   create_table "threats", :force => true do |t|
     t.string   "name"
