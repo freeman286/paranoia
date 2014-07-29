@@ -7,7 +7,7 @@ Paranoia::Application.routes.draw do
   
   
   resources :threats
-  match '/threats/:lat/:long' => 'threats#index'
+  match '/threats/:lat/:long' => 'threats#index', :lat => /-?[\d.]+/, :long => /-?[\d.]+/
   
   match '/comments/json_create/:name/:user_name/:user_image_url/:threat_id' => 'comments#json_create'
   match '/comments/:id/json_update/:name/:user_name/:user_image_url/:threat_id' => 'comments#json_update'
