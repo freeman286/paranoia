@@ -108,7 +108,7 @@ class Threat < ActiveRecord::Base
         casualty = "no one"
       end
       
-      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring' + casualty : ''}", :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
+      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring ' + casualty : ''}", :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
     end
   end
   
