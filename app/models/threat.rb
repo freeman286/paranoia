@@ -3,9 +3,9 @@ class Threat < ActiveRecord::Base
   
   attr_accessible :description, :image_url, :name, :location, :latitude, :longitude
   
-  
   has_many :comments
   
+  attr_accessor :address
   reverse_geocoded_by :latitude, :longitude
   after_validation :reverse_geocode
   
@@ -21,7 +21,7 @@ class Threat < ActiveRecord::Base
             t = Threat.new
             t.name = d["category"]
             t.description = d["outcome_status"]["category"] if d["outcome_status"]
-            t.location = "#{d["location"]["latitude"]}-#{d["location"]["longitude"]}"
+            t.location = d["location"]["street"]["name"] if d["location"]["street"]
             t.latitude = d["location"]["latitude"].to_f
             t.longitude = d["location"]["longitude"].to_f
             t.save
@@ -38,8 +38,10 @@ class Threat < ActiveRecord::Base
   def self.get_road_data
     csv_text = File.read("#{Rails.root}/data/DfTRoadSafety_Vehicles_2013.csv")
     csv = CSV.parse(csv_text, :headers => true)
-    csv.first(10).each do |row|
-      case row.to_hash[:Vehicle_Reference].to_i
+    csv.each do |row|
+      puts row.to_hash
+      puts row.to_hash["Vehicle_Reference"]
+      case row.to_hash["Vehicle_Reference"].to_i
       when 1
         vehicle_type = "bicycle"
       when 2..5
@@ -64,7 +66,8 @@ class Threat < ActiveRecord::Base
         vehicle_type = "vehicle"
       end
       
-      case row.to_hash[:Hit_Object_in_Carriageway].to_i
+      puts row.to_hash["Hit_Object_in_Carriageway"]
+      case row.to_hash["Hit_Object_in_Carriageway"].to_i
       when 0
         hit = "nothing"
       when 1
@@ -93,7 +96,8 @@ class Threat < ActiveRecord::Base
         hit = "nothing"
       end
       
-      case row.to_hash[:Vehicle_Reference].to_i
+      puts row.to_hash["Vehicle_Reference"]
+      case row.to_hash["Vehicle_Reference"].to_i
       when 1
         casualty = "the driver"
       when 2
