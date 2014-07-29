@@ -83,7 +83,7 @@ class Threat < ActiveRecord::Base
       puts row.to_hash["Hit_Object_in_Carriageway"]
       case row.to_hash["Hit_Object_in_Carriageway"].to_i
       when 0
-        hit = "nothing"
+        hit = ["a previous accident", "road works", "a parked vehicle", "the roof of a bridge", "the side of a bridge", "a bollard", "an open door of another vehicle", "a roundabout", "a kerb", "another object", "an animal"][(0..10).to_a.sample]
       when 1
         hit = "a previous accident"
       when 2
