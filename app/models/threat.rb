@@ -10,6 +10,12 @@ class Threat < ActiveRecord::Base
   after_validation :reverse_geocode
   
   def self.get_police_data
+    urls = [
+      'http://www.wichitasedgwickcountycrimestoppers.com/CrimeTapeSmall.jpg',
+      'http://www.uclan.ac.uk/news/assets/media/hate_crime_hand_rdax_500x500.jpg',
+      'http://www.movehut.co.uk/news/wp-content/uploads/2012/01/Crime-commercial-properties-735x1024.jpg',
+      'http://www.nrimalayalee.com/wp-content/uploads/2013/09/crime.jpg',
+    ]
     n = 50
     while n < 52
       w = -30
@@ -24,6 +30,7 @@ class Threat < ActiveRecord::Base
             t.location = d["location"]["street"]["name"] if d["location"]["street"]
             t.latitude = d["location"]["latitude"].to_f
             t.longitude = d["location"]["longitude"].to_f
+            t.image_url = urls[(0..3).to_a.sample]
             t.save
             t
           end
@@ -36,12 +43,19 @@ class Threat < ActiveRecord::Base
   end
   
   def self.get_road_data
+    urls = [
+      'http://roadrulesblog.files.wordpress.com/2012/02/accident.jpg',
+      'http://www.mannsafety.com/images/car-ax.jpg',
+      'http://i.telegraph.co.uk/multimedia/archive/01461/accident_1461384c.jpg',
+      'http://www.theinjurylawyers.co.uk/injury-lawyers-blog/wp-content/uploads/2010/07/horse-road-accident.jpg'
+    ]
+    
     csv_text = File.read("#{Rails.root}/data/DfTRoadSafety_Vehicles_2013.csv")
     csv = CSV.parse(csv_text, :headers => true)
     csv.each do |row|
       puts row.to_hash
-      puts row.to_hash["Vehicle_Reference"]
-      case row.to_hash["Vehicle_Reference"].to_i
+      puts row.to_hash["Vehicle_Type"]
+      case row.to_hash["Vehicle_Type"].to_i
       when 1
         vehicle_type = "bicycle"
       when 2..5
@@ -108,7 +122,7 @@ class Threat < ActiveRecord::Base
         casualty = "no one"
       end
       
-      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring ' + casualty : ''}", :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
+      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring ' + casualty : ''}", :image_url => urls[(0..3).to_a.sample], :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
     end
   end
   
