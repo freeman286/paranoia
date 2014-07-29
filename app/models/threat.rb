@@ -126,6 +126,28 @@ class Threat < ActiveRecord::Base
     end
   end
   
+  def self.get_animal_data
+    animals = [
+      'wolf',
+      'bear',
+      'fox',
+      'badger'
+    ]
+    urls = [
+      'http://images.nationalgeographic.com/wpf/media-live/photos/000/005/cache/grey-wolf_565_600x450.jpg',
+      'http://www.wildanimalfightclub.com/Portals/41405/images//grizzly.jpg',
+      'http://www-tc.pbs.org/wnet/nature/files/2008/09/610_ag_red-fox.jpg',
+      'http://2.bp.blogspot.com/-fb3nETTmvh0/Tsup45YNyGI/AAAAAAAAAoo/c6TH2VtPQoA/s1600/Angry+Badger.jpg'
+    ]
+    f = File.open("#{Rails.root}/data/NATIONAL_FOREST_ESTATE_RECREATION_POINTS_GB.shp.xml")
+    doc = Nokogiri::XML(f)
+    100.times do
+      i = (0..3).to_a.sample
+      Threat.create!(:latitude => doc.xpath("//northBoundLatitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :longitude => doc.xpath("//westBoundLongitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :name => "#{animals[i].capitalize} attack", :description => "Risk of being attacked by a #{animals[i]}", :image_url => urls[i])
+    end
+    f.close
+  end
+  
   def location_to_lat_long!
     self.latitude = self.location.match(/(-?\d{1,2}.\d{6})-(-?\d{1,2}.\d{6})/)[1]
     self.longitude = self.location.match(/(-?\d{1,2}.\d{6})-(-?\d{1,2}.\d{6})/)[2]

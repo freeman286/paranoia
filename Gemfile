@@ -9,6 +9,7 @@ gem 'sqlite3'
 gem "httparty"
 gem 'mongoid', '3.0.5'
 gem "geocoder"
+gem "nokogiri"
 
 # Gems used only for assets and not required
 # in production environments by default.
