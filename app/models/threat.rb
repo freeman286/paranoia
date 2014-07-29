@@ -17,9 +17,9 @@ class Threat < ActiveRecord::Base
       'http://www.nrimalayalee.com/wp-content/uploads/2013/09/crime.jpg',
     ]
     n = 50
-    while n < 52
-      w = -30
-      while w < 5
+    while n < 60
+      w = -6
+      while w < 2
         response = HTTParty.get("http://data.police.uk/api/crimes-street/all-crime?lat=#{n}&lng=#{w}&date=2013-01")
         data = response.parsed_response
         if data.present?
