@@ -1,7 +1,11 @@
-class Threat < ActiveRecord::Base
+class Threat < ActiveRecord::Base  
+  
   attr_accessible :description, :image_url, :name, :location, :latitude, :longitude
   
   has_many :comments
+  
+  reverse_geocoded_by :latitude, :longitude
+  after_validation :reverse_geocode
   
   def self.get_police_data
     n = 50
@@ -36,15 +40,6 @@ class Threat < ActiveRecord::Base
   end
   
   def self.find_by_lat_long(lat, long)
-    threats = []
-    Threat.all.each do |threat|
-      x = threat.location.index("-")
-      tlat = threat.location[0..x-1].to_f
-      tlong = threat.location[x+1..-1].to_f
-      if (lat - 1 < tlat) && (tlat < lat + 1) && (long - 1 < tlong) && (tlong < long + 1)
-        threats << threat
-      end 
-    end
-    threats
+    Threat.near([lat, long], 69)
   end
 end
