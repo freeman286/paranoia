@@ -74,6 +74,11 @@ class CommentsController < ApplicationController
       end
     end
   end
+  
+  def json_update
+    @comment = Comment.find(params[:id])
+    respond_with @comment.update_attributes(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f)
+  end
 
   # DELETE /comments/1
   # DELETE /comments/1.json
@@ -85,5 +90,10 @@ class CommentsController < ApplicationController
       format.html { redirect_to comments_url }
       format.json { head :no_content }
     end
+  end
+  
+  def json_destroy
+    @comment = Comment.find(params[:id])
+    respond_with @comment.destroy
   end
 end

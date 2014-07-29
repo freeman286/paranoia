@@ -3,6 +3,7 @@ class Threat < ActiveRecord::Base
   
   attr_accessible :description, :image_url, :name, :location, :latitude, :longitude
   
+  
   has_many :comments
   
   reverse_geocoded_by :latitude, :longitude
@@ -37,7 +38,7 @@ class Threat < ActiveRecord::Base
   def self.get_road_data
     csv_text = File.read("#{Rails.root}/data/DfTRoadSafety_Vehicles_2013.csv")
     csv = CSV.parse(csv_text, :headers => true)
-    csv.each do |row|
+    csv.first(10).each do |row|
       case row.to_hash[:Vehicle_Reference].to_i
       when 1
         vehicle_type = "bicycle"
@@ -103,9 +104,7 @@ class Threat < ActiveRecord::Base
         casualty = "no one"
       end
       
-      if casualty != 'no one' || hit != 'nothing'
-        Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring' + casualty : ''}", :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
-      end
+      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring' + casualty : ''}", :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
     end
   end
   
