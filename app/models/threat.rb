@@ -1,5 +1,5 @@
 class Threat < ActiveRecord::Base
-  attr_accessible :description, :image_url, :name, :location
+  attr_accessible :description, :image_url, :name, :location, :latitude, :longitude
   
   has_many :comments
   
@@ -16,6 +16,8 @@ class Threat < ActiveRecord::Base
             t.name = d["category"]
             t.description = d["outcome_status"]["category"] if d["outcome_status"]
             t.location = "#{d["location"]["latitude"]}-#{d["location"]["longitude"]}"
+            t.latitude = d["location"]["latitude"].to_f
+            t.longitude = d["location"]["longitude"].to_f
             t.save
             t
           end
@@ -25,6 +27,12 @@ class Threat < ActiveRecord::Base
       end 
       n += 1.to_f / 69.to_f
     end
+  end
+  
+  def location_to_lat_long!
+    self.latitude = self.location.match(/(-?\d{1,2}.\d{6})-(-?\d{1,2}.\d{6})/)[1]
+    self.longitude = self.location.match(/(-?\d{1,2}.\d{6})-(-?\d{1,2}.\d{6})/)[2]
+    self.save
   end
   
   def self.find_by_lat_long(lat, long)
