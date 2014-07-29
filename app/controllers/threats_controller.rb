@@ -11,7 +11,7 @@ class ThreatsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @threats }
+      format.json { render json: @threats, :callback => params['callback'] }
     end
   end
 

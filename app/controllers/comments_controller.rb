@@ -56,7 +56,7 @@ class CommentsController < ApplicationController
   end
   
   def json_create
-    respond_with Comment.create(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f)
+    respond_with Comment.create(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f), :callback => params['callback']
   end
 
   # PUT /comments/1
@@ -77,7 +77,7 @@ class CommentsController < ApplicationController
   
   def json_update
     @comment = Comment.find(params[:id])
-    respond_with @comment.update_attributes(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f)
+    respond_with @comment.update_attributes(name: params[:name], user_name: params[:user_name], user_image_url: params[:user_image_url], threat_id: params[:threat_id].to_f), :callback => params['callback']
   end
 
   # DELETE /comments/1
@@ -94,6 +94,6 @@ class CommentsController < ApplicationController
   
   def json_destroy
     @comment = Comment.find(params[:id])
-    respond_with @comment.destroy
+    respond_with @comment.destroy, :callback => params['callback']
   end
 end
