@@ -5,7 +5,7 @@ class ThreatsController < ApplicationController
     if params[:lat] && params[:long]
       @threats = Threat.find_by_lat_long(params[:lat].to_f, params[:long].to_f)
     elsif params[:post]
-      @threats = Threat.near(params[:post])
+      @threats = Threat.near(params[:post], 100)
     else
       @threats = Threat.all
     end
