@@ -9,14 +9,14 @@ class Threat < ActiveRecord::Base
   reverse_geocoded_by :latitude, :longitude
   after_validation :reverse_geocode
   
-  def self.get_police_data
+  def self.get_police_data(lat)
     urls = [
       'http://www.wichitasedgwickcountycrimestoppers.com/CrimeTapeSmall.jpg',
       'http://www.uclan.ac.uk/news/assets/media/hate_crime_hand_rdax_500x500.jpg',
       'http://www.movehut.co.uk/news/wp-content/uploads/2012/01/Crime-commercial-properties-735x1024.jpg',
       'http://www.nrimalayalee.com/wp-content/uploads/2013/09/crime.jpg',
     ]
-    n = 50
+    n = lat
     while n < 60
       w = -6
       while w < 2
