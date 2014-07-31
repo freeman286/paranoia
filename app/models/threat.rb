@@ -1,7 +1,7 @@
 class Threat < ActiveRecord::Base  
   require 'csv'    
   
-  attr_accessible :description, :image_url, :name, :location, :latitude, :longitude
+  attr_accessible :description, :image_url, :name, :location, :latitude, :longitude, :type
   
   has_many :comments
   
@@ -122,7 +122,7 @@ class Threat < ActiveRecord::Base
         casualty = "no one"
       end
       
-      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring ' + casualty : ''}", :image_url => urls[(0..3).to_a.sample], :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000)
+      Threat.create!(:name => "Road accident with a #{vehicle_type}", :description => "Risk of a #{vehicle_type} coliding with #{hit} #{casualty != 'no one' ? 'injuring ' + casualty : ''}", :image_url => urls[(0..3).to_a.sample], :latitude => (500000..520000).to_a.sample.to_f / 10000, :longitude =>(-70000..20000).to_a.sample.to_f / 10000, :type => "road")
     end
   end
   
@@ -143,7 +143,7 @@ class Threat < ActiveRecord::Base
     doc = Nokogiri::XML(f)
     100.times do
       i = (0..3).to_a.sample
-      Threat.create!(:latitude => doc.xpath("//northBoundLatitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :longitude => doc.xpath("//westBoundLongitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :name => "#{animals[i].capitalize} attack", :description => "Risk of being attacked by a #{animals[i]}", :image_url => urls[i])
+      Threat.create!(:latitude => doc.xpath("//northBoundLatitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :longitude => doc.xpath("//westBoundLongitude").first.child.text.to_f + ((-100000..100000).to_a.sample.to_f / 10000), :name => "#{animals[i].capitalize} attack", :description => "Risk of being attacked by a #{animals[i]}", :image_url => urls[i], :type => "animal")
     end
     f.close
   end
