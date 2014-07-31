@@ -4,9 +4,10 @@ class ThreatsController < ApplicationController
   def index
     if params[:lat] && params[:long]
       @threats = Threat.find_by_lat_long(params[:lat].to_f, params[:long].to_f)
+    elsif params[:post]
+      @threats = Threat.near(params[:post])
     else
       @threats = Threat.all
-      
     end
 
     respond_to do |format|
